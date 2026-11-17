@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6-сынып: Наймандар, Керейіттер, Жалайырлар</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Alpine.js for interactive tabs & state management -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-amber-50/40 text-slate-800 antialiased min-h-screen flex flex-col justify-between" x-data="lessonApp()">
+
+    <!-- HEADER / NAVIGATION BAR -->
+    <header class="bg-amber-900 text-white shadow-lg border-b border-amber-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-amber-500 text-slate-950 p-2 rounded-xl font-bold flex items-center justify-center shadow">
+                    <i class="fa-solid fa-monument text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-sm sm:text-base tracking-wide uppercase">Қазақстан тарихы</h1>
+                    <p class="text-[10px] sm:text-xs text-amber-200">Интерактивті оқу модулі • 6-сынып</p>
+                </div>
+            </div>
+            <div class="hidden sm:flex items-center space-x-2 text-xs bg-amber-800/60 px-3 py-1.5 rounded-lg border border-amber-700">
+                <i class="fa-solid fa-graduation-cap text-amber-400"></i>
+                <span>Оқу мақсаты: <b>6.3.1.3</b></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+        
+        <!-- TOP BANNER -->
+        <div class="bg-gradient-to-r from-amber-900 via-amber-800 to-yellow-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl mb-8 relative overflow-hidden">
+            <div class="absolute -right-6 -bottom-10 opacity-10 text-9xl font-serif">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div class="relative z-10 space-y-3">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="bg-amber-500/30 text-amber-200 border border-amber-400/30 text-xs px-3 py-1 rounded-full font-medium">6-сынып</span>
+                    <span class="bg-amber-500/30 text-amber-200 border border-amber-400/30 text-xs px-3 py-1 rounded-full font-medium">Тарих</span>
+                    <span class="bg-amber-400 text-amber-950 font-bold text-xs px-3 py-1 rounded-full">Оқу мақсаты: 6.3.1.3</span>
+                </div>
+                <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight">Наймандар, Керейіттер, Жалайырлар</h2>
+                <p class="text-amber-100 text-xs sm:text-sm max-w-4xl leading-relaxed">
+                    X ғасырдан XIII ғасырдың басына дейінгі кезеңдегі түркі мемлекеттері дамуының ерекшеліктерін түсіндіру, олардың ұқсастықтары мен айырмашылықтарын анықтау, әйгілі билеушілері мен картографиялық орналасуын интерактивті карта арқылы меңгеру.
+                </p>
+            </div>
+        </div>
+
+        <!-- NAVIGATION TABS -->
+        <div class="flex border-b border-amber-200 mb-8 overflow-x-auto no-scrollbar space-x-2">
+            <button @click="tab = 'theory'" :class="tab === 'theory' ? 'border-amber-600 text-amber-900 bg-amber-100/60 font-bold' : 'border-transparent text-slate-600 hover:text-slate-900'" class="py-3 px-5 border-b-2 font-medium text-xs sm:text-sm rounded-t-xl transition duration-150 flex items-center whitespace-nowrap">
+                <i class="fa-solid fa-crown mr-2 text-amber-600"></i> 1. Теория & Билеушілер
+            </button>
+            <button @click="tab = 'map'" :class="tab === 'map' ? 'border-amber-600 text-amber-900 bg-amber-100/60 font-bold' : 'border-transparent text-slate-600 hover:text-slate-900'" class="py-3 px-5 border-b-2 font-medium text-xs sm:text-sm rounded-t-xl transition duration-150 flex items-center whitespace-nowrap">
+                <i class="fa-solid fa-map-location-dot mr-2 text-amber-600"></i> 2. Интерактивті Карта
+            </button>
+            <button @click="tab = 'venn'" :class="tab === 'venn' ? 'border-amber-600 text-amber-900 bg-amber-100/60 font-bold' : 'border-transparent text-slate-600 hover:text-slate-900'" class="py-3 px-5 border-b-2 font-medium text-xs sm:text-sm rounded-t-xl transition duration-150 flex items-center whitespace-nowrap">
+                <i class="fa-solid fa-diagram-project mr-2 text-amber-600"></i> 3. Салыстыру (Венн)
+            </button>
+            <button @click="tab = 'tasks'" :class="tab === 'tasks' ? 'border-amber-600 text-amber-900 bg-amber-100/60 font-bold' : 'border-transparent text-slate-600 hover:text-slate-900'" class="py-3 px-5 border-b-2 font-medium text-xs sm:text-sm rounded-t-xl transition duration-150 flex items-center whitespace-nowrap">
+                <i class="fa-solid fa-vial mr-2 text-amber-600"></i> 4. Интерактивті Тест
+            </button>
+        </div>
+
+        <!-- TAB 1: THEORY & RULERS -->
+        <div x-show="tab === 'theory'" class="space-y-6">
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-amber-200">
+                <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center space-x-2 border-b border-slate-100 pb-3">
+                    <i class="fa-solid fa-shield-cat text-amber-600"></i>
+                    <span>Тайпалардың саяси құрылымы, шаруашылығы және әйгілі билеушілері</span>
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Найман -->
+                    <div class="bg-gradient-to-b from-amber-50/80 to-amber-100/30 rounded-2xl p-5 border border-amber-200/90 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="text-lg font-bold text-amber-950">Наймандар</h4>
+                                <span class="text-xs bg-amber-200 text-amber-900 font-semibold px-2.5 py-0.5 rounded-full">X–XIII ғ.б.</span>
+                            </div>
+                            <ul class="space-y-2 text-xs sm:text-sm text-slate-700 mb-4">
+                                <li><strong>Мекені:</strong> Алтайдан Орхон өзеніне дейін.</li>
+                                <li><strong>Астанасы:</strong> Балықты қаласы (Орхон бойында).</li>
+                                <li><strong>Даму ерекшелігі:</strong> «Сегіз» мағынасын білдіреді. Жазу-сызуы дамыған (ұйғыр жазуы), несториан христиандығын ұстанған.</li>
+                            </ul>
+
+                            <div class="border-t border-amber-200/80 pt-3 mt-2">
+                                <h5 class="font-bold text-amber-950 text-xs uppercase tracking-wider mb-2 flex items-center">
+                                    <i class="fa-solid fa-user-shield text-amber-600 mr-1.5"></i> Әйгілі билеушілері:
+                                </h5>
+                                <div class="space-y-2 text-xs">
+                                    <div class="bg-white/90 p-2.5 rounded-xl border border-amber-200/80 shadow-sm">
+                                        <p class="font-bold text-amber-900">Иنانч-білге хан (XII ғ.)</p>
+                                        <p class="text-[11px] text-slate-600 mt-0.5">Найман хандығын орталықтандырып, экономикасы мен саясатын күшейткен реформатор билеуші.</p>
+                                    </div>
+                                    <div class="bg-white/90 p-2.5 rounded-xl border border-amber-200/80 shadow-sm">
+                                        <p class="font-bold text-amber-900">Күшлік хан (1208–1218 жж.)</p>
+                                        <p class="text-[11px] text-slate-600 mt-0.5">Шыңғыс ханнан жеңілген соң Жетісуға келіп, Қарақытайлар билігін басып алды.</p>
+                                    </div>
+                                    <div class="bg-white/90 p-2.5 rounded-xl border border-amber-200/80 shadow-sm">
+                                        <p class="font-bold text-amber-900">Таян хан</p>
+                                        <p class="text-[11px] text-slate-600 mt-0.5">1204 жылы Шыңғыс хан әскеріне қарсы соғыста билік жүргізген соңғы найман хандарының бірі.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Керейіт -->
+                    <div class="bg-gradient-to-b from-sky-50/80 to-blue-100/30 rounded-2xl p-5 border border-sky-200/90 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="text-lg font-bold text-sky-950">Керейіттер</h4>
+                                <span class="text-xs bg-sky-200 text-sky-900 font-semibold px-2.5 py-0.5 rounded-full">X–XIII ғ.б.</span>
+                            </div>
+                            <ul class="space-y-2 text-xs sm:text-sm text-slate-700 mb-4">
+                                <li><strong>Мекені:</strong> Орхон, Тола, Селенга өзендері алқабы.</li>
+                                <li><strong>Астанасы:</strong> Битөбе (Қаратун мекені).</li>
+                                <li><strong>Даму ерекшелігі:</strong> Мемлекеттік басқару жүйесі «шерби» (уәзірлер), түмендер мен онбасы жүйесі бойынша ұйымдастырылған.</li>
+                            </ul>
+
+                            <div class="border-t border-sky-200/80 pt-3 mt-2">
+                                <h5 class="font-bold text-sky-950 text-xs uppercase tracking-wider mb-2 flex items-center">
+                                    <i class="fa-solid fa-user-shield text-sky-600 mr-1.5"></i> Әйгілі билеушілері:
+                                </h5>
+                                <div class="space-y-2 text-xs">
+                                    <div class="bg-white/90 p-2.5 rounded-xl border border-sky-200/80 shadow-sm">
+                                        <p class="font-bold text-sky-900">Тұғырыл хан (Ван хан)</p>
+                                        <p class="text-[11px] text-slate-600 mt-0.5">Шыңғыс ханның (Темучиннің) өкіл әкесі, Азиядағы беделді «Ван» (патша) титулының иесі.</p>
+                                    </div>
+                                    <div class="bg-white/90 p-2.5 rounded-xl border border-sky-200/80 shadow-sm">
+                                        <p class="font-bold text-sky-900">Маркус хан (XII ғ. ортасы)</p>
+                                        <p class="text-[11px] text-slate-600 mt-0.5">Керейіт хандығының дербестігін нығайтып, көршілес татарлармен күрес жүргізген хан.</p>
+                                    </div>
+                                    <div class="bg-white/90 p-2.5 rounded-xl border border-sky-200/80 shadow-sm">
+                                        <p class="font-bold text-sky-900">Құршақұз Бұйрық хан</p>
+                                        <p class="text-[11px] text-slate-600 mt-0.5">Елді орталықтандырып, әскерді 10 000-дық тумендерге бөліп басқарды.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Жалайыр -->
+                    <div class="bg-gradient-to-b from-emerald-50/80 to-teal-100/30 rounded-2xl p-5 border border-emerald-200/90 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="text-lg font-bold text-emerald-950">Жалайырлар</h4>
+                                <span class="text-xs bg-emerald-200 text-emerald-900 font-semibold px-2.5 py-0.5 rounded-full">X–XIII ғ.б.</span>
+                            </div>
+                            <ul class="space-y-2 text-xs sm:text-sm text-slate-700 mb-4">
+                                <li><strong>Мекені:</strong> Селенга, Онон, Керулен өзендері аралығы.</li>
+                                <li><strong>Ордасы:</strong> Онон өзенінің бойы.</li>
+                                <li><strong>Даму ерекшелігі:</strong> Түрік-моңғол тайпалары арасында беделді болды. «Түмбұлақ» (он бұтақ) тармақтарынан құралған.</li>
+                            </ul>
+
+                            <div class="border-t border-emerald-200/80 pt-3 mt-2">
+                                <h5 class="font-bold text-emerald-950 text-xs uppercase tracking-wider mb-2 flex items-center">
+                                    <i class="fa-solid fa-user-shield text-emerald-600 mr-1.5"></i> Әйгілі билеушілері:
+                                </h5>
+                                <div class="space-y-2 text-xs">
+                                    <div class="bg-white/90 p-2.5 rounded-xl border border-emerald-200/80 shadow-sm">
+                                        <p class="font-bold text-emerald-900">Жамұқа (Гурхан)</p>
+                                        <p class="text-[11px] text-slate-600 mt-0.5">Жалайыр көсемі. Темучиннің андасы (досы), 1201 жылы «Гурхан» (бас хан) болып сайланды.</p>
+                                    </div>
+                                    <div class="bg-white/90 p-2.5 rounded-xl border border-emerald-200/80 shadow-sm">
+                                        <p class="font-bold text-emerald-900">Мұқылай ноян (1170–1223 жж.)</p>
+                                        <p class="text-[11px] text-slate-600 mt-0.5">Шыңғыс ханның бас қолбасшысы («төрт күліктің» бірі), «Го-ван» (патша) даңқты титулының иегері.</p>
+                                    </div>
+                                    <div class="bg-white/90 p-2.5 rounded-xl border border-emerald-200/80 shadow-sm">
+                                        <p class="font-bold text-emerald-900">Қадырғали Жалайыри</p>
+                                        <p class="text-[11px] text-slate-600 mt-0.5">Атақты тарихшы, XVI ғ. «Жами ат-таварих» (Шежірелер жинағы) еңбегінің авторы.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: INTERACTIVE MAP -->
+        <div x-show="tab === 'map'" class="space-y-6">
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-amber-200">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 border-b pb-3">
+                    <h3 class="text-xl font-bold text-slate-900 flex items-center space-x-2">
+                        <i class="fa-solid fa-map-location-dot text-amber-600"></i>
+                        <span>Картографиялық Көрсеткіш: Географиялық орналасуы</span>
+                    </h3>
+                    <span class="text-xs text-amber-800 bg-amber-100 font-semibold px-3 py-1 rounded-full mt-2 sm:mt-0">Шығыс Қазақстан & Моңғолия аумағы</span>
+                </div>
+                
+                <p class="text-xs sm:text-sm text-slate-600 mb-6">
+                    Картадағы белгілерді (маркерлерді) түрту немесе нұқу арқылы Наймандар, Керейіттер және Жалайырлардың тарихи орналасу аймақтарын, өзен жүйелері мен астаналарын оқып үйреніңіз.
+                </p>
+
+                <!-- MAP VISUAL CONTAINER -->
+                <div class="relative w-full h-[420px] bg-slate-950 rounded-2xl overflow-hidden border-2 border-amber-500/40 shadow-2xl">
+                    <!-- BACKGROUND PATTERN & GRID -->
+                    <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#f59e0b_1px,transparent_1px)] [background-size:20px_20px]"></div>
+                    
+                    <!-- VECTOR RIVERS & MOUNTAINS SCHEMATIC -->
+                    <svg class="absolute inset-0 w-full h-full stroke-sky-400/80 fill-none" stroke-width="2">
+                        <!-- River Paths -->
+                        <path d="M 40 220 Q 140 160 220 240 T 360 180" stroke-dasharray="4 4" class="animate-pulse"/>
+                        <path d="M 280 320 Q 420 220 560 260 T 780 160" stroke-dasharray="4 4" class="animate-pulse"/>
+                        <path d="M 550 140 Q 650 200 850 180" stroke-dasharray="4 4"/>
+                        
+                        <!-- River Labels -->
+                        <text x="50" y="200" fill="#38bdf8" font-size="11" font-weight="bold">Алтай таулары</text>
+                        <text x="320" y="240" fill="#38bdf8" font-size="11" font-weight="bold">Орхон & Тола өзендері</text>
+                        <text x="640" y="220" fill="#38bdf8" font-size="11" font-weight="bold">Онон & Керулен өзендері</text>
+                    </svg>
+
+                    <!-- MARKER 1: NAIMAN (WEST) -->
+                    <div @click="activeRegion = 'naiman'" class="absolute top-[35%] left-[12%] sm:left-[18%] cursor-pointer group z-10">
+                        <div class="relative flex items-center justify-center">
+                            <span class="animate-ping absolute inline-flex h-10 w-10 rounded-full bg-amber-400 opacity-75"></span>
+                            <div class="relative bg-amber-500 text-slate-950 font-bold text-xs sm:text-sm px-3.5 py-2 rounded-xl shadow-2xl border-2 border-white flex items-center space-x-2 group-hover:scale-110 transition transform">
+                                <i class="fa-solid fa-location-dot text-amber-950"></i>
+                                <span>1. Наймандар (Балықты)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MARKER 2: KEREIT (CENTER) -->
+                    <div @click="activeRegion = 'kereit'" class="absolute top-[50%] left-[42%] sm:left-[45%] cursor-pointer group z-10">
+                        <div class="relative flex items-center justify-center">
+                            <span class="animate-ping absolute inline-flex h-10 w-10 rounded-full bg-sky-400 opacity-75"></span>
+                            <div class="relative bg-sky-500 text-slate-950 font-bold text-xs sm:text-sm px-3.5 py-2 rounded-xl shadow-2xl border-2 border-white flex items-center space-x-2 group-hover:scale-110 transition transform">
+                                <i class="fa-solid fa-location-dot text-sky-950"></i>
+                                <span>2. Керейіттер (Битөбе)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MARKER 3: JALAIYR (EAST) -->
+                    <div @click="activeRegion = 'jalaiyr'" class="absolute top-[30%] left-[70%] sm:left-[74%] cursor-pointer group z-10">
+                        <div class="relative flex items-center justify-center">
+                            <span class="animate-ping absolute inline-flex h-10 w-10 rounded-full bg-emerald-400 opacity-75"></span>
+                            <div class="relative bg-emerald-500 text-slate-950 font-bold text-xs sm:text-sm px-3.5 py-2 rounded-xl shadow-2xl border-2 border-white flex items-center space-x-2 group-hover:scale-110 transition transform">
+                                <i class="fa-solid fa-location-dot text-emerald-950"></i>
+                                <span>3. Жалайырлар (Онон)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DYNAMIC MAP DETAILS DISPLAY -->
+                <div class="mt-6 p-6 rounded-2xl border transition-all duration-300"
+                     :class="{
+                        'bg-amber-50/70 border-amber-300': activeRegion === 'naiman',
+                        'bg-sky-50/70 border-sky-300': activeRegion === 'kereit',
+                        'bg-emerald-50/70 border-emerald-300': activeRegion === 'jalaiyr'
+                     }">
+                    <template x-if="activeRegion === 'naiman'">
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-2">
+                                <span class="bg-amber-500 text-slate-950 font-bold text-xs px-2.5 py-1 rounded-md">БА Т Ы С  А Й М А Қ</span>
+                                <h4 class="font-extrabold text-amber-950 text-lg">Наймандардың картографиялық орналасуы</h4>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                                <strong>Шекаралары:</strong> Батыста Алтай тауларынан бастап, шығыста Орхон өзенінің алқабына дейінгі кең-байтақ жерлерді мекендеді. Солтүстігінде Енисей қырғыздарымен, оңтүстігінде Ұйғырлармен шектесті.
+                            </p>
+                            <p class="text-xs sm:text-sm text-slate-700">
+                                <strong>Бас астанасы:</strong> <u>Балықты қаласы</u> — Орхон өзенінің бойында орналасқан саяси және қолөнер орталығы.
+                            </p>
+                        </div>
+                    </template>
+
+                    <template x-if="activeRegion === 'kereit'">
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-2">
+                                <span class="bg-sky-500 text-slate-950 font-bold text-xs px-2.5 py-1 rounded-md">О Р Т А Л Ы Қ  А Й М А Қ</span>
+                                <h4 class="font-extrabold text-sky-950 text-lg">Керейіттердің картографиялық орналасуы</h4>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                                <strong>Шекаралары:</strong> Моңғол үстіртінің орталық бөлігін — Орхон, Тола, Селенга өзендерінің ортаңғы және төменгі ағысын мекендеді. Наймандар мен Жалайырлар арасында орналасты.
+                            </p>
+                            <p class="text-xs sm:text-sm text-slate-700">
+                                <strong>Хан ордасы:</strong> <u>Битөбе қалашығы</u> (Қаратун мекені — бүгінгі Улан-Батор маңы).
+                            </p>
+                        </div>
+                    </template>
+
+                    <template x-if="activeRegion === 'jalaiyr'">
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-2">
+                                <span class="bg-emerald-500 text-slate-950 font-bold text-xs px-2.5 py-1 rounded-md">Ш Ы Ғ Ы С  А Й М А Қ</span>
+                                <h4 class="font-extrabold text-emerald-950 text-lg">Жалайырлардың картографиялық орналасуы</h4>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                                <strong>Шекаралары:</strong> Селенга, Онон, Керулен өзендерінің алқаптары мен Бурхан-Халдун таулы өңірлерінде мекендеген.
+                            </p>
+                            <p class="text-xs sm:text-sm text-slate-700">
+                                <strong>Негізгі ордасы:</strong> Онон өзені бойындағы шұрайлы жайылымдар.
+                            </p>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: VENN DIAGRAM -->
+        <div x-show="tab === 'venn'" class="space-y-6">
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-amber-200">
+                <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center space-x-2 border-b pb-3">
+                    <i class="fa-solid fa-diagram-project text-amber-600"></i>
+                    <span>6.3.1.3 Оқу мақсаты: Ұқсастықтары мен Айырмашылықтары (Венн Диаграммасы)</span>
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Ұқсастықтары -->
+                    <div class="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-5 shadow-sm">
+                        <h4 class="font-bold text-amber-950 text-base mb-3 flex items-center">
+                            <i class="fa-solid fa-equals text-amber-600 mr-2"></i> Негізгі Ұқсастықтары:
+                        </h4>
+                        <ul class="space-y-2.5 text-xs sm:text-sm text-slate-700 list-disc list-inside">
+                            <li>X–XIII ғ.б. Моңғол үстірті мен Шығыс Қазақстан аумағында қатар өмір сүрген түркі-моңғол тайпалары.</li>
+                            <li><strong>Басқару жүйесі:</strong> Хан билігі, ұлыстық жүйе, уәзірлер мен шерби жүйесі ұқсас.</li>
+                            <li><strong>Шаруашылығы:</strong> Көшпелі және жартылай көшпелі мал шаруашылығы, жылқы мен қой өсіру.</li>
+                            <li><strong>Діни сенімі:</strong> Несториан христиандығын кеңінен ұстанған, Тәңіршілдік элементтері сақталған.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Айырмашылықтары -->
+                    <div class="bg-gradient-to-br from-sky-50 to-blue-50 border border-sky-200 rounded-2xl p-5 shadow-sm">
+                        <h4 class="font-bold text-sky-950 text-base mb-3 flex items-center">
+                            <i class="fa-solid fa-code-compare text-sky-600 mr-2"></i> Басты Айырмашылықтары:
+                        </h4>
+                        <ul class="space-y-2.5 text-xs sm:text-sm text-slate-700 list-disc list-inside">
+                            <li><strong>Географиясы:</strong> Наймандар — Батыста (Алтай), Керейіттер — Орталықта (Тола/Орхон), Жалайырлар — Шығыста (Онон/Керулен).</li>
+                            <li><strong>Астаналары:</strong> Балықты (Наймандар) vs Битөбе (Керейіттер).</li>
+                            <li><strong>Саяси бағыты:</strong> Тұғырыл хан (Керейіт) Шыңғыс ханмен одақтас болса, Жамұқа (Жалайыр) мен Күшлік (Найман) Шыңғыс ханға қарсы соғысқан.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: INTERACTIVE QUIZ -->
+        <div x-show="tab === 'tasks'" class="space-y-6">
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-amber-200">
+                <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center space-x-2 border-b pb-3">
+                    <i class="fa-solid fa-clipboard-check text-amber-600"></i>
+                    <span>Интерактивті Білім Тексеру Тесті</span>
+                </h3>
+
+                <div class="space-y-6">
+                    <!-- Q1 -->
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <p class="font-bold text-slate-800 text-sm mb-3">1. Найман хандығының астанасы қай қала болған?</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            <button @click="answers[0] = 'A'" :class="answers[0] === 'A' ? 'bg-amber-600 text-white font-bold' : 'bg-white text-slate-700 border hover:bg-slate-100'" class="p-3 rounded-xl text-xs transition shadow-sm">A) Балықты</button>
+                            <button @click="answers[0] = 'B'" :class="answers[0] === 'B' ? 'bg-amber-600 text-white font-bold' : 'bg-white text-slate-700 border hover:bg-slate-100'" class="p-3 rounded-xl text-xs transition shadow-sm">B) Битөбе</button>
+                            <button @click="answers[0] = 'C'" :class="answers[0] === 'C' ? 'bg-amber-600 text-white font-bold' : 'bg-white text-slate-700 border hover:bg-slate-100'" class="p-3 rounded-xl text-xs transition shadow-sm">C) Суяб</button>
+                        </div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <p class="font-bold text-slate-800 text-sm mb-3">2. Шыңғыс ханның өкіл әкесі болған, «Ван» титулын алған Керейіт ханы кім?</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            <button @click="answers[1] = 'A'" :class="answers[1] === 'A' ? 'bg-amber-600 text-white font-bold' : 'bg-white text-slate-700 border hover:bg-slate-100'" class="p-3 rounded-xl text-xs transition shadow-sm">A) Инанч-білге</button>
+                            <button @click="answers[1] = 'B'" :class="answers[1] === 'B' ? 'bg-amber-600 text-white font-bold' : 'bg-white text-slate-700 border hover:bg-slate-100'" class="p-3 rounded-xl text-xs transition shadow-sm">B) Тұғырыл хан (Ван хан)</button>
+                            <button @click="answers[1] = 'C'" :class="answers[1] === 'C' ? 'bg-amber-600 text-white font-bold' : 'bg-white text-slate-700 border hover:bg-slate-100'" class="p-3 rounded-xl text-xs transition shadow-sm">C) Мұқылай ноян</button>
+                        </div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <p class="font-bold text-slate-800 text-sm mb-3">3. 1201 жылы өзін «Гурхан» деп жариялаған Жалайыр көсемі кім?</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            <button @click="answers[2] = 'A'" :class="answers[2] === 'A' ? 'bg-amber-600 text-white font-bold' : 'bg-white text-slate-700 border hover:bg-slate-100'" class="p-3 rounded-xl text-xs transition shadow-sm">A) Жамұқа</button>
+                            <button @click="answers[2] = 'B'" :class="answers[2] === 'B' ? 'bg-amber-600 text-white font-bold' : 'bg-white text-slate-700 border hover:bg-slate-100'" class="p-3 rounded-xl text-xs transition shadow-sm">B) Күшлік хан</button>
+                            <button @click="answers[2] = 'C'" :class="answers[2] === 'C' ? 'bg-amber-600 text-white font-bold' : 'bg-white text-slate-700 border hover:bg-slate-100'" class="p-3 rounded-xl text-xs transition shadow-sm">C) Таян хан</button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-4 border-t">
+                        <button @click="checkQuiz()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold px-6 py-2.5 rounded-xl text-sm transition shadow-md">
+                            Нәтижені Тексеру
+                        </button>
+                        <div x-show="score !== null" class="text-sm font-bold text-slate-800">
+                            Нәтиже: <span class="text-amber-600 text-lg font-extrabold" x-text="score"></span> / 3
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p>© EduPlanInspect • Қазақстан тарихы 6-сынып интерактивті оқу құралы</p>
+            <p class="text-slate-500">6.3.1.3 оқу мақсатына сай әзірленген сабақ модулі</p>
+        </div>
+    </footer>
+
+    <script>
+        function lessonApp() {
+            return {
+                tab: 'theory',
+                activeRegion: 'naiman',
+                answers: [null, null, null],
+                score: null,
+                checkQuiz() {
+                    let total = 0;
+                    if (this.answers[0] === 'A') total++;
+                    if (this.answers[1] === 'B') total++;
+                    if (this.answers[2] === 'A') total++;
+                    this.score = total;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
